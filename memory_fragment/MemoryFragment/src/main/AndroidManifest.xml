@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="mf.fssq.mf_part_one">
+
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/logo"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/logo"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+        </activity>
+        <activity android:name=".RecordActivity">
+        </activity>
+        <activity android:name=".AboutActivity">
+        </activity>
+        <activity android:name=".AchievementActivity">
+        </activity>
+        <activity android:name=".BioActivity">
+        </activity>
+        <activity android:name=".NameActivity">
+        </activity>
+        <activity android:name=".AliPayGestureLockActivity">
+        </activity>
+        <activity android:name=".LockedActivity">
+        </activity>
+        <activity android:name=".SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

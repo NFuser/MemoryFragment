@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/background_record"
+                android:orientation="vertical"
+                tools:context=".RecordActivity">
+
+    <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout
+        android:id="@+id/rl_top"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingTop="8dp"
+        android:paddingRight="20dp">
+
+        <LinearLayout
+            android:id="@+id/ll_text"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="5dp">
+            <TextView
+                android:id="@+id/tv_week"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:gravity="right|bottom"
+                android:textColor="#212121"
+                android:paddingRight="10dp"
+                android:textSize="28sp"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:layout_weight="2"
+                android:fontFamily="serif"
+                android:gravity="left|bottom"
+                android:textColor="#212121"
+                android:paddingLeft="10dp"
+                android:textSize="16sp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#212121"
+            android:orientation="horizontal"
+            android:layout_below="@id/ll_text"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp">
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/sl_edit"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/rl_top"
+        android:layout_above="@id/view_line"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:overScrollMode="never">
+
+        <EditText
+            android:id="@+id/et_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:gravity="top|left"
+            android:hint="请输入内容"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:paddingBottom="10dp"
+            android:textColor="#212121"
+            android:textSize="20sp"/>
+    </ScrollView>
+
+    <View
+        android:id="@+id/view_line"
+        android:layout_width="wrap_content"
+        android:layout_height="1dip"
+        android:layout_above="@id/rl_bottom"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="#392f41"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="20dp"
+        android:paddingTop="8dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="15dp">
+
+        <ImageView
+            android:id="@+id/iv_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:src="@mipmap/picture1"/>
+
+        <ImageView
+            android:id="@+id/iv_save"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/done1"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

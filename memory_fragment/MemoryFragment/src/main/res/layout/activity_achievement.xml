@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#f0f0f4"
+    tools:context=".AchievementActivity">
+
+    <LinearLayout
+        android:id="@+id/ll_top"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#a1afc9"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/back"
+            android:layout_margin="5dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:text="Achievement"
+            android:textColor="#fff"
+            android:textSize="30sp"/>
+    </LinearLayout>
+
+    <GridView
+        android:id="@+id/main_gridview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/ll_top"
+        android:layout_above="@id/ll_bottom"
+        android:padding="16dp"
+        android:horizontalSpacing="4dp"
+        android:listSelector="@android:color/transparent"
+        android:numColumns="7"
+        android:verticalSpacing="4dp">
+    </GridView>
+
+    <LinearLayout
+        android:id="@+id/ll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
+        <TextView
+            android:id="@+id/sum"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="累计记录："
+            android:textSize="20sp"
+            android:paddingLeft="5dp"
+            android:layout_gravity="left|center_vertical"/>
+
+        <TextView
+            android:id="@+id/con"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="连续记录："
+            android:textSize="20sp"
+            android:paddingLeft="5dp"
+            android:layout_gravity="left|center_vertical"/>
+    </LinearLayout>
+
+
+</RelativeLayout>

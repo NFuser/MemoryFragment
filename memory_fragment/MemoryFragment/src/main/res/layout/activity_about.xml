@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AboutActivity"
+    android:background="#f0f0f4"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/ll_top"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#a1afc9"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/back"
+            android:layout_margin="5dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="About"
+            android:textColor="#fff"
+            android:textSize="30sp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_top">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_centerHorizontal="true"
+                android:src="@mipmap/logo128"/>
+            <ImageView
+                android:id="@+id/icon_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/logo_text"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/icon"/>
+            <TextView
+                android:id="@+id/version"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:gravity="center"
+                android:layout_below="@id/icon_text"
+                android:text="V0.0.0"
+                android:textColor="#616161"/>
+            <TextView
+                android:id="@+id/author"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:layout_below="@id/version"
+                android:text="©铁头娃"
+                android:textColor="#212121"/>
+            <TextView
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:gravity="left"
+                android:layout_below="@id/author"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:text="    生活中我们常有很多灵光一闪的想法或感悟，这些往往是短暂的、转瞬即逝的，而之后支离破碎的回忆却难以拼凑出完整的想法，遂制作此APP。"
+                android:textColor="#757575"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

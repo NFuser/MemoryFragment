@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_margin="20dp"
+              android:background="#fff"
+              android:orientation="vertical"
+              tools:context=".fragment.HomeFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/home_week"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_gravity="center|bottom"
+        android:background="@drawable/home_line"
+        android:fontFamily="casual"
+        android:paddingLeft="15dp"
+
+        android:paddingTop="15dp"
+        android:textSize="30sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/home_line">
+
+        <TextView
+            android:id="@+id/home_date"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="serif-monospace"
+            android:gravity="center"
+            android:textSize="30sp"/>
+
+        <TextView
+            android:id="@+id/home_time"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:fontFamily="serif-monospace"
+            android:gravity="center"
+            android:textSize="30sp"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fadingEdge="none"
+        android:overScrollMode="never"
+        android:background="#ffca28">
+
+        <TextView
+            android:id="@+id/home_diary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#212121"
+            android:paddingLeft="8dp"
+            android:text="今天你什么都没有留下..."
+            android:paddingTop="5dp"
+            android:textSize="20sp"
+            android:paddingRight="8dp"
+            android:singleLine="false"/>
+    </ScrollView>
+
+
+</LinearLayout>
