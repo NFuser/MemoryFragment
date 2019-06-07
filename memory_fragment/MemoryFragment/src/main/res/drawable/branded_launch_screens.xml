@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android"
             android:opacity="opaque">
-    <!--黑色背景颜色-->
+    <!--背景颜色-->
     <item android:drawable="@color/index" />
-    <!-- 产品logo-->
-    <item>
+
+    <item >
         <bitmap
-            android:gravity="center"
+                android:gravity="center"
+                android:src="@mipmap/feeling"/>
+    </item>
+    <!-- 产品logo-->
+    <item android:bottom="150dp">
+        <bitmap
+            android:gravity="bottom"
             android:src="@mipmap/logo128" />
     </item>
     <!-- 右上角的图标元素 -->
@@ -16,9 +22,9 @@
             <!--android:src="@mipmap/logo" />-->
     <!--</item>-->
     <!--最下面的文字-->
-    <item android:bottom="50dp">
-        <bitmap
-            android:gravity="bottom"
-            android:src="@mipmap/logo_text" />
-    </item>
+<!--    <item android:bottom="50dp">-->
+<!--        <bitmap-->
+<!--            android:gravity="bottom"-->
+<!--            android:src="@mipmap/logo_text" />-->
+<!--    </item>-->
 </layer-list>

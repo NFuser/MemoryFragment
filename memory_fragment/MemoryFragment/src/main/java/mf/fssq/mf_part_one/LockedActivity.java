@@ -1,9 +1,7 @@
 package mf.fssq.mf_part_one;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,14 +24,12 @@ public class LockedActivity extends AppCompatActivity {
     private Context mContext;
     private final int KEY=100;
     private UserDatabaseHelper mUserDatabaseHelper;
-    private String password;
-    private int sta=0;
 
     //region 开启沉浸模式
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus && Build.VERSION.SDK_INT >= 19) {
+        if (hasFocus) {
             View decorView = getWindow().getDecorView();
             decorView.setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -63,8 +59,9 @@ public class LockedActivity extends AppCompatActivity {
         Cursor cursor= db.rawQuery(sql,new Object[]{1});
         if (cursor.getCount()!=0){
             if (cursor.moveToFirst()){
-                sta=cursor.getInt(cursor.getColumnIndex("statue"));
-                if (sta!=0){
+                //    private String password;
+                int sta = cursor.getInt(cursor.getColumnIndex("statue"));
+                if (sta !=0){
                     on_off.setChecked(true);
                 }else {
                     on_off.setChecked(false);
@@ -105,23 +102,24 @@ public class LockedActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        switch (requestCode){
-            case KEY:
-                if (resultCode==666){
-                    //密码设置成功，开启数据库，修改密码状态和密码
-                    Intent intent=data;
-                    Bundle bundle=intent.getBundleExtra("Data");
-                    password=bundle.getString("pwd");
-                    Log.w("test","接受到的password值："+password);
-                    //打开或创建数据库
-                    mUserDatabaseHelper = new UserDatabaseHelper(mContext, "User.db", null, 1);
-                    SQLiteDatabase db = mUserDatabaseHelper.getReadableDatabase("system");
-                    String sql="update User set statue=? ,password=? where id=?";
-                    db.execSQL(sql,new Object[]{1,password,1});
-                    db.close();
-                    setResult(666);
-                    finish();
-                }
+        if (requestCode == KEY) {
+            if (resultCode == 666) {
+//                    //密码设置成功，开启数据库，修改密码状态和密码
+//                    Intent intent=data;
+//                    Bundle bundle=intent.getBundleExtra("Data");
+//                    password=bundle.getString("pwd");
+//                    Log.w("test","接受到的password值："+password);
+//                    //打开或创建数据库
+//                    mUserDatabaseHelper = new UserDatabaseHelper(mContext, "User.db", null, 1);
+//                    SQLiteDatabase db = mUserDatabaseHelper.getReadableDatabase("system");
+//                    String sql="update User set statue=? ,password=? where id=?";
+//                    db.execSQL(sql,new Object[]{1,password,1});
+//                    db.close();
+                setResult(666);
+                finish();
+            } else if (resultCode == 99) {
+                on_off.setChecked(false);
+            }
         }
 
         super.onActivityResult(requestCode, resultCode, data);

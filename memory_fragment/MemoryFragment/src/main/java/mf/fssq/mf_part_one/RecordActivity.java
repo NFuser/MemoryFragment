@@ -1,25 +1,16 @@
 package mf.fssq.mf_part_one;
 
 import android.Manifest;
-import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 
 import net.sqlcipher.Cursor;
 import net.sqlcipher.database.SQLiteDatabase;
-//import android.database.Cursor;
-//import android.database.sqlite.SQLiteDatabase;
-//import android.database.sqlite.SQLiteOpenHelper;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -30,15 +21,14 @@ import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,16 +40,11 @@ import mf.fssq.mf_part_one.util.ScreenUtils;
 public class RecordActivity extends AppCompatActivity {
 
     private TextView tv_week, tv_date;
-    private ScrollView sl_edit;
-    private DiaryDatabaseHelper mDiaryDatabaseHelper;
-    private SQLiteDatabase db;
-    private Map<String, String> map = new HashMap<String, String>();
+    private Map<String, String> map = new HashMap<>();
     private EditText et_content;
     private ImageView iv_picture;
     private ImageView iv_save;
     private int id;
-    private String fragment;
-    private Context context;
 
 
     //请求外部存储，请求码
@@ -69,16 +54,13 @@ public class RecordActivity extends AppCompatActivity {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE};
     //插入图片的Activity的返回的code
-    static final int IMAGE_CODE = 99;
-    public final int HOME = 3;
-    public final int USER = 4;
-
+    private static final int IMAGE_CODE = 99;
 
     //开启沉浸模式
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus && Build.VERSION.SDK_INT >= 19) {
+        if (hasFocus) {
             View decorView = getWindow().getDecorView();
             decorView.setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -104,16 +86,13 @@ public class RecordActivity extends AppCompatActivity {
         //从intent取出bundle
         Bundle bundle = intent.getBundleExtra("Database_id");
         //获取id
-        id = Integer.parseInt(bundle.getString("id"));
+        id = Integer.parseInt(Objects.requireNonNull(bundle.getString("id")));
         Log.w("test", "查询id " + id);
-        //获取页面跳转前显示fragment
-        fragment=bundle.getString("fragment");
-        Log.w("test", "页面跳转前fragment： " + fragment);
 
         //初始化控件
         findId();
 
-        /***
+        /*
          * 解决全屏模式下android:windowSoftInputMode="adjustPan"失效问题
          * 参考网址：https://www.diycode.cc/topics/383
          */
@@ -127,11 +106,11 @@ public class RecordActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //参考网址：http://blog.csdn.net/abc__d/article/details/51790806
 //        Bitmap bm = null;
         // 外界的程序访问ContentProvider所提供数据 可以通过ContentResolver接口
-        ContentResolver resolver = getContentResolver();
+//        ContentResolver resolver = getContentResolver();
         if (requestCode == IMAGE_CODE) {
             try {
                 // 获得图片的uri
@@ -139,9 +118,9 @@ public class RecordActivity extends AppCompatActivity {
 //                bm = MediaStore.Images.Media.getBitmap(resolver, originalUri);
                 String[] proj = {MediaStore.Images.Media.DATA};
                 // 好像是android多媒体数据库的封装接口，具体的看Android文档
-                android.database.Cursor cursor = getContentResolver().query(originalUri, proj, null, null, null);
+                android.database.Cursor cursor = getContentResolver().query(Objects.requireNonNull(originalUri), proj, null, null, null);
                 // 按我个人理解 这个是获得用户选择的图片的索引值
-                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                int column_index = Objects.requireNonNull(cursor).getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
                 // 将光标移至开头 ，这个很重要，不小心很容易引起越界
                 cursor.moveToFirst();
                 // 最后根据索引值获取图片路径
@@ -200,7 +179,7 @@ public class RecordActivity extends AppCompatActivity {
         //获取屏幕宽度
         int width = ScreenUtils.getScreenWidth(RecordActivity.this);
         //获取屏幕高度
-        int height = ScreenUtils.getScreenHeight(RecordActivity.this);
+//        int height = ScreenUtils.getScreenHeight(RecordActivity.this);
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         //对图片进行解码
@@ -211,7 +190,7 @@ public class RecordActivity extends AppCompatActivity {
         bitmap = ImageUtils.zoomImage(bitmap, (width - 36) * 0.93, (bitmap.getHeight() * ((width - 36) * 0.93)) / bitmap.getWidth());
         Log.w("picture", "缩放后图片宽：" + bitmap.getWidth() + "高：" + bitmap.getHeight());
 
-        /**
+        /*
          * setSpan(what, start, end, flags)
          * - what传入各种Span类型的实例;
          * - start和end标记要替代的文字内容的范围；
@@ -237,15 +216,7 @@ public class RecordActivity extends AppCompatActivity {
         iv_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String sql="update Diary set content=? where id=?";
-                db.beginTransaction();
-                db.execSQL(sql,new Object[]{et_content.getText().toString(),id});
-                db.setTransactionSuccessful();
-                db.endTransaction();
-
-                Intent intent=new Intent();
-                setResult( HOME,intent);
-                finish();
+                saveBack();
             }
         });
     }
@@ -254,23 +225,28 @@ public class RecordActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            saveData();
-            Intent intent=new Intent();
-            setResult( HOME,intent);
-            finish();
+            saveBack();
         }
         return super.onKeyDown(keyCode, event);
     }
 
     //region 保存数据
-    private void saveData() {
+    private void saveBack() {
+        //SQLCipher初始化时需要初始化库
+        SQLiteDatabase.loadLibs(this);
+        DiaryDatabaseHelper mDiaryDatabaseHelper = new DiaryDatabaseHelper(this, "Diary.db", null, 1);
+        SQLiteDatabase db = mDiaryDatabaseHelper.getWritableDatabase("token");
         String sql="update Diary set content=? where id=?";
         db.beginTransaction();
         db.execSQL(sql,new Object[]{et_content.getText().toString(),id});
         db.setTransactionSuccessful();
         db.endTransaction();
+        db.close();
 //        Intent intent = new Intent(context, MainActivity.class);
 //        startActivity(intent);
+        Intent intent=new Intent();
+        setResult( 666,intent);
+        finish();
     }
 
     //region 调用图库
@@ -289,8 +265,8 @@ public class RecordActivity extends AppCompatActivity {
 
     //region 返回界面数据
     private void returnData() {
-        mDiaryDatabaseHelper = new DiaryDatabaseHelper(this, "Diary.db", null, 1);
-        db = mDiaryDatabaseHelper.getWritableDatabase("token");
+        DiaryDatabaseHelper mDiaryDatabaseHelper = new DiaryDatabaseHelper(this, "Diary.db", null, 1);
+        SQLiteDatabase db = mDiaryDatabaseHelper.getWritableDatabase("token");
         //查询
         String sql = "select title,week,content from Diary where id =?" ;
         Cursor cursor = db.rawQuery(sql, new String[]{String.valueOf(id)});
@@ -304,6 +280,8 @@ public class RecordActivity extends AppCompatActivity {
         }
         tv_date.setText(map.get("title"));
         tv_week.setText(map.get("week"));
+        cursor.close();
+        db.close();
         initContent();
     }
 
@@ -311,7 +289,7 @@ public class RecordActivity extends AppCompatActivity {
         //input是获取将被解析的字符串
         String input = map.get("content");
         //将图片那一串字符串解析出来,即<img src=="xxx" />
-        Pattern p = Pattern.compile("\\<img src=\".*?\"\\/>");
+        Pattern p = Pattern.compile("<img src=\".*?\"/>");
         Matcher m = p.matcher(input);
 
         //使用SpannableString了，这个不会可以看这里哦：http://blog.sina.com.cn/s/blog_766aa3810100u8tx.html#cmt_523FF91E-7F000001-B8CB053C-7FA-8A0
@@ -322,11 +300,11 @@ public class RecordActivity extends AppCompatActivity {
             int start = m.start();
             int end = m.end();
             //path是去掉<img src=""/>的中间的图片路径
-            String path = s.replaceAll("\\<img src=\"|\"\\/>","").trim();
+            String path = s.replaceAll("<img src=\"|\"/>","").trim();
 
             //利用spannableString和ImageSpan来替换掉这些图片
             int width = ScreenUtils.getScreenWidth(RecordActivity.this);
-            int height = ScreenUtils.getScreenHeight(RecordActivity.this);
+//            int height = ScreenUtils.getScreenHeight(RecordActivity.this);
 
             Bitmap bitmap = BitmapFactory.decodeFile(path, null);
             bitmap = ImageUtils.zoomImage(bitmap, (width - 36) * 0.93, (bitmap.getHeight() * ((width - 36) * 0.93)) / bitmap.getWidth());
@@ -345,9 +323,7 @@ public class RecordActivity extends AppCompatActivity {
         tv_date = findViewById(R.id.tv_date);
         et_content = findViewById(R.id.et_content);
         iv_picture = findViewById(R.id.iv_picture);
-        sl_edit = findViewById(R.id.sl_edit);
         iv_save = findViewById(R.id.iv_save);
-        context = this;
     }
 
 }

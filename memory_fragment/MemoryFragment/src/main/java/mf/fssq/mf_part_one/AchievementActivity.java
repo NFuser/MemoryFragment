@@ -1,6 +1,5 @@
 package mf.fssq.mf_part_one;
 
-import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,7 +16,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import mf.fssq.mf_part_one.entity.Compare;
-import mf.fssq.mf_part_one.entity.Dairy;
+import mf.fssq.mf_part_one.entity.ListRecord;
 import mf.fssq.mf_part_one.util.DetectAdapter;
 import mf.fssq.mf_part_one.util.DiaryDatabaseHelper;
 import mf.fssq.mf_part_one.util.MyAdapter;
@@ -26,16 +25,14 @@ public class AchievementActivity extends AppCompatActivity {
 
     private GridView mGridview;
     private ImageView back;
-    private List<Dairy> date_list = new ArrayList();
-    private MyAdapter mAdapter;
-    private DiaryDatabaseHelper mDiaryDatabaseHelper;
+    private List<ListRecord> date_list = new ArrayList<>();
     private TextView sum,con;
 
     //region 开启沉浸模式
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus && Build.VERSION.SDK_INT >= 19) {
+        if (hasFocus) {
             View decorView = getWindow().getDecorView();
             decorView.setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -58,7 +55,8 @@ public class AchievementActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        sum.setText("累计记录： "+String.valueOf(date_list.size())+"天");
+        String sumtext="累计记录： "+date_list.size()+"天";
+        sum.setText(sumtext);
 
         if (date_list.size()==0){
             con.setText("连续记录： 0天");
@@ -73,9 +71,10 @@ public class AchievementActivity extends AppCompatActivity {
 
                 Calendar calendar1=Calendar.getInstance();
                 calendar1.clear();
-                calendar1.set(date1,month1,year1);
+                calendar1.set(year1,month1-1,date1);
+                Log.w("compare","calendar1"+" "+year1+" "+month1+" "+date1);
                 long millis1=calendar1.getTimeInMillis();
-                Log.w("test"," millis1:"+millis1);
+                Log.w("compare"," millis1:"+millis1);
 
                 Compare compare2=parting(date_list.get(i-1).getTitle());
                 int date2=compare2.getDate();
@@ -84,11 +83,12 @@ public class AchievementActivity extends AppCompatActivity {
 
                 Calendar calendar2=Calendar.getInstance();
                 calendar2.clear();
-                calendar2.set(date2,month2,year2);
+                calendar2.set(year2,month2-1,date2);
+                Log.w("compare","calendar2"+" "+year2+" "+month2+" "+date2);
                 long millis2=calendar2.getTimeInMillis();
-                Log.w("test"," millis2:"+millis2);
+                Log.w("compare"," millis2:"+millis2);
 
-                if (((millis1-millis2)/1000000)<=31536){
+                if ((millis1-millis2)<=86400000){
                     temp++;
                 }else {
                     if (temp>max){
@@ -98,7 +98,8 @@ public class AchievementActivity extends AppCompatActivity {
                 }
             }
             int x=max>temp?max:temp;
-            con.setText("连续记录： "+x+"天");
+            String context="连续记录： "+x+"天";
+            con.setText(context);
         }
     }
 
@@ -123,8 +124,7 @@ public class AchievementActivity extends AppCompatActivity {
         }
         int year=Integer.parseInt(title[2]);
 
-        Compare compare=new Compare(date,month,year);
-        return compare;
+        return new Compare(date,month,year);
     }
 
     private void initListener() {
@@ -148,27 +148,24 @@ public class AchievementActivity extends AppCompatActivity {
         SQLiteDatabase.loadLibs(this);
 
         //打开或创建数据库
-        mDiaryDatabaseHelper = new DiaryDatabaseHelper(this, "Diary.db", null, 1);
+        DiaryDatabaseHelper mDiaryDatabaseHelper = new DiaryDatabaseHelper(this, "Diary.db", null, 1);
         SQLiteDatabase db = mDiaryDatabaseHelper.getReadableDatabase("token");
-        Cursor cursor = db.rawQuery("select * from Diary", null);
+        Cursor cursor = db.rawQuery("select title,week from Diary", null);
         //扫描数据库
         while (cursor.moveToNext()) {
             Log.w("init", "数据库不为空，开始查询数据");
-            int id = cursor.getInt(0);
-            String time = cursor.getString(cursor.getColumnIndex("time"));
             String title = cursor.getString(cursor.getColumnIndex("title"));
             String week = cursor.getString(cursor.getColumnIndex("week"));
-            String content = cursor.getString(cursor.getColumnIndex("content"));
 
             //创建一个Dairy对象存储一条数据
-            Dairy dairy = new Dairy(time, title, week, content);
-            date_list.add(dairy);
+            ListRecord listRecord = new ListRecord(title, week);
+            date_list.add(listRecord);
             Log.w("init", "dairy存储形式" + date_list.toString());
         }
         //关闭数据库
         db.close();
 
-        mAdapter = new DetectAdapter(this,date_list);
+        MyAdapter mAdapter = new DetectAdapter(this, date_list);
 
         mGridview.setAdapter(mAdapter);
     }

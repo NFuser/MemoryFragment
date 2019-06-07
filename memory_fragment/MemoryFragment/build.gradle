@@ -4,7 +4,6 @@ android {
     compileSdkVersion 28
 
 
-
     defaultConfig {
         applicationId "mf.fssq.mf_part_one"
         minSdkVersion 23
@@ -14,7 +13,6 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
-
     buildTypes {
         release {
             minifyEnabled false
@@ -26,14 +24,18 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
-
-
+    
 }
 
 dependencies {
 
+    //引导页依赖1
+    implementation 'com.github.AppIntro:AppIntro:v4.2.3'
+    
+    //Locked依赖
     implementation 'com.wangnan:gesturelockview:1.0.1'
 
+    //SQLCipher依赖
     implementation 'net.zetetic:android-database-sqlcipher:4.1.3@aar'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])

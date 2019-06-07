@@ -60,7 +60,7 @@
     <!--左边抽屉菜单-->
     <LinearLayout
         android:id="@+id/ll_left"
-        android:layout_width="180dp"
+        android:layout_width="150dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:orientation="vertical"
@@ -83,6 +83,5 @@
             android:layout_weight="9"/>
 
     </LinearLayout>
-
 
 </android.support.v4.widget.DrawerLayout>

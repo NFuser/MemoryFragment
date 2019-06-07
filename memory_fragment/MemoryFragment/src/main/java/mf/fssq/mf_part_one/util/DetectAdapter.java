@@ -4,20 +4,19 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
 import mf.fssq.mf_part_one.R;
-import mf.fssq.mf_part_one.entity.Dairy;
+import mf.fssq.mf_part_one.entity.ListRecord;
 
 public class DetectAdapter extends MyAdapter {
 
     private Context mContext;
-    private List<Dairy> list;
+    private List<ListRecord> list;
 
-    public DetectAdapter(Context context, List<Dairy> string) {
+    public DetectAdapter(Context context, List<ListRecord> string) {
         super(context, string);
         this.mContext=context;
         this.list=string;

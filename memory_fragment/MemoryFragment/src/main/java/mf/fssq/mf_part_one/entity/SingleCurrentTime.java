@@ -1,15 +1,12 @@
 package mf.fssq.mf_part_one.entity;
 
-import android.util.Log;
-
 import java.util.Calendar;
 
 //    懒汉式创建当前时间对象
 public class SingleCurrentTime {
-
     //    年月日
     private int year;
-    private String month;
+    private int month;
     private int date;
 
     //    时分秒
@@ -21,11 +18,19 @@ public class SingleCurrentTime {
     private String week;
 
     //    获取Calendar类实例对象
-    Calendar mCalendar=Calendar.getInstance();
+    private static Calendar mCalendar=Calendar.getInstance();
 
     //    私有化构造函数
     private SingleCurrentTime() {
-        ShowTime();
+        hour=mCalendar.get(Calendar.HOUR_OF_DAY);
+        minute=mCalendar.get(Calendar.MINUTE);
+        second=mCalendar.get(Calendar.SECOND);
+
+        year=mCalendar.get(Calendar.YEAR);
+        month=mCalendar.get(Calendar.MONTH)+1;
+        date=mCalendar.get(Calendar.DAY_OF_MONTH);
+
+        week=BackWeek(mCalendar.get(Calendar.DAY_OF_WEEK));
     }
 
     //    创建唯一实例对象，使用一个私有静态成员变量保存
@@ -38,39 +43,11 @@ public class SingleCurrentTime {
         }
         return singleCurrentTime;
     }
-
-    public String GetDate(){
-//        获取日期
-        this.year=mCalendar.get(Calendar.YEAR);
-        this.month=BackMonth((Calendar.MONTH)+2);
-        this.date=mCalendar.get(Calendar.DAY_OF_MONTH);
-
-        return this.date+"."+this.month+"."+this.year;
-    }
-
-    public String GetTime(){
-//        获取时间
-        mCalendar=null;
-        mCalendar=Calendar.getInstance();
-        this.hour=mCalendar.get(Calendar.HOUR_OF_DAY);
-        this.minute=mCalendar.get(Calendar.MINUTE);
-        this.second=mCalendar.get(Calendar.SECOND);
-        return this.hour+":"+this.minute+":"+this.second;
-    }
-
-
-    public void ShowTime(){
-        GetDate();//设置日期
-        GetTime();//设置时间
-        this.week=BackWeek(mCalendar.get(Calendar.DAY_OF_WEEK));//设置星期
-    }
-
-
     public int getYear(){
         return year;
     }
 
-    public String getMonth() {
+    public int getMonth() {
         return month;
     }
 
@@ -78,22 +55,27 @@ public class SingleCurrentTime {
         return date;
     }
 
-    public int getHour() {
-        return hour;
-    }
-
-    public int getMinute() {
-        return minute;
-    }
-
-    public int getSecond() {
-        return second;
-    }
-
     public String getWeek() {
         return week;
     }
 
+    //获取时间
+    public String getTime() {
+        return hour+":"+minute+":"+second;
+    }
+
+    //旧格式的日期
+    public String oldFormatDate(){
+        return year+"."+month+"."+date;
+    }
+    //新格式的日期
+    public String newFormatDate(){
+        String newFormatMonth;
+        newFormatMonth=BackMonth(month);
+        return date+"."+newFormatMonth+"."+year;
+    }
+
+    //月份转换int->String
     public String BackMonth(int i){
         String str=null;
         switch (i){
@@ -112,8 +94,9 @@ public class SingleCurrentTime {
         }
         return str;
     }
-    //    星期转换int->String
-    public String BackWeek(int i){
+
+    //星期转换int->String
+    private String BackWeek(int i){
         String str=null;
         switch (i){
             case 1:str= "Sunday";break;
@@ -122,39 +105,35 @@ public class SingleCurrentTime {
             case 4:str= "Wednesday";break;
             case 5:str= "Thursday";break;
             case 6:str= "Friday";break;
-            case 7:str= "Saturday";break;
+            case 7:str= "saturday";break;
         }
         return str;
     }
 
-    public void clear(){
-        if (LatelyTime.getInstance().getLately_year() != SingleCurrentTime.getInstance().getYear() ||
-               !(LatelyTime.getInstance().getLately_month().equals(SingleCurrentTime.getInstance().getMonth())) ||
-                LatelyTime.getInstance().getLately_date() != SingleCurrentTime.getInstance().getDate()){
-//            重新获取Calendar对象并刷新当前时间
-            Log.w("test","运行clear,两次时间不一样");
-            mCalendar=null;
-            mCalendar=Calendar.getInstance();
-            ShowTime();
-//            保存关闭时间，并清空对象
-            LatelyTime.getInstance().setLately_year(singleCurrentTime.getYear());
-            LatelyTime.getInstance().setLately_month(singleCurrentTime.getMonth());
-            LatelyTime.getInstance().setLately_date(singleCurrentTime.getDate());
-            Log.w("test","clear方法"+LatelyTime.getInstance().getLately_year());
-
-            LatelyTime.getInstance().setLately_hour(singleCurrentTime.getHour());
-            LatelyTime.getInstance().setLately_minute(singleCurrentTime.getMinute());
-            LatelyTime.getInstance().setLately_second(singleCurrentTime.getSecond());
-
-            LatelyTime.getInstance().setLately_week(singleCurrentTime.getWeek());
-
-            singleCurrentTime=null;
-            mCalendar=null;
-        }else{
-//            重新获取Calendar和SingleCurrentTime对象
-            Log.w("test","运行clear，两次时间相同");
-            mCalendar=null;
-            singleCurrentTime=null;
-        }
+    public void saveToLatelyTime(){
+        LatelyTime.getInstance().setLately_year(year);
+        LatelyTime.getInstance().setLately_month(month);
+        LatelyTime.getInstance().setLately_date(date);
+        LatelyTime.getInstance().setLately_week(week);
     }
+
+    public int transmonth(String month) {
+        int x=0;
+        switch (month){
+            case "January": x= 1;break;
+            case "February":x= 2;break;
+            case "March":x= 3;break;
+            case "April":x= 4;break;
+            case "May":x= 5;break;
+            case "June":x= 6;break;
+            case "July":x= 7;break;
+            case "August":x= 8;break;
+            case "September":x= 9;break;
+            case "October":x= 10;break;
+            case "November":x= 11;break;
+            case "December":x= 12;break;
+        }
+        return x;
+    }
+
 }

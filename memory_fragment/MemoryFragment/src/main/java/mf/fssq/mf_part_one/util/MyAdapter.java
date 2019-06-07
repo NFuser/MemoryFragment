@@ -1,7 +1,7 @@
 package mf.fssq.mf_part_one.util;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
@@ -12,16 +12,17 @@ import android.widget.TextView;
 
 import java.util.List;
 import mf.fssq.mf_part_one.R;
-import mf.fssq.mf_part_one.entity.Dairy;
+import mf.fssq.mf_part_one.entity.ListRecord;
+import mf.fssq.mf_part_one.entity.SingleCurrentTime;
 
 public class MyAdapter extends BaseAdapter {
 
     private Context mContext;
-    private List<Dairy> list;
+    private List<ListRecord> list;
 //    private String nString;
 //    private ArrayList mString=new ArrayList();
 
-    public MyAdapter(Context context,List<Dairy> string){
+    public MyAdapter(Context context,List<ListRecord> string){
         super();
         this.mContext=context;
         this.list=string;
@@ -42,19 +43,21 @@ public class MyAdapter extends BaseAdapter {
         return position;
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
 //        获取视图
         if (convertView==null){
             convertView=LayoutInflater.from(mContext).inflate(R.layout.item_layout,null);
         }
 
         TextView item_textview=convertView.findViewById(R.id.item_textview);
-        item_textview.setText(list.get(position).getTitle());
+        String wordDate=list.get(position).getTitle();
+        String numberDte=transDate(wordDate);
+        item_textview.setText(numberDte);
 
 //        图片绑定
-        Resources res=convertView.getResources();
+//        Resources res=convertView.getResources();
         switch (list.get(position).getWeek()){//SingleCurrentTime.getInstance().getWeek()
             case "Sunday":
                 Drawable dra1=ResourcesCompat.getDrawable(convertView.getResources(),R.mipmap.sunday,null);
@@ -80,15 +83,24 @@ public class MyAdapter extends BaseAdapter {
                 Drawable dra6=ResourcesCompat.getDrawable(convertView.getResources(),R.mipmap.friday,null);
                 item_textview.setCompoundDrawablesWithIntrinsicBounds(dra6,null,null,null);
                 break;
-            case "Saturday":
+            case "saturday":
                 Drawable dra7=ResourcesCompat.getDrawable(convertView.getResources(),R.mipmap.saturday,null);
                 item_textview.setCompoundDrawablesWithIntrinsicBounds(dra7,null,null,null);
                 break;
         }
         return convertView;
     }
-    public void add(Dairy dairy){
-        list.add(dairy);
+
+    private String transDate(String wordDate) {
+        String transed;
+        String[] a=wordDate.split("\\.");
+        String date=a[0];
+        String month=a[1];
+        String year=a[2];
+        String newMonth=String.valueOf(SingleCurrentTime.getInstance().transmonth(month)) ;
+        transed=year+"."+newMonth+"."+date;
+        return transed;
     }
+
 }
 

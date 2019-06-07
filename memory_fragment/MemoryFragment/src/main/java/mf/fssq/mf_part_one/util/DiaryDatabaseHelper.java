@@ -4,13 +4,13 @@ import android.content.Context;
 //import android.database.sqlite.SQLiteDatabase;
 //import android.database.sqlite.SQLiteOpenHelper;
 
-import net.sqlcipher.Cursor;
 import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteOpenHelper;
 
 public class DiaryDatabaseHelper extends SQLiteOpenHelper {
 
-    public static final String CREATE_DIARY = "create table Diary("
+
+    private static final String CREATE_DIARY = "create table Diary("
             + "id integer primary key autoincrement, "
             + "time text, "
             + "title text, "
@@ -24,11 +24,9 @@ public class DiaryDatabaseHelper extends SQLiteOpenHelper {
      * PRIMARY KEY将id列设置为主键
      * AutoIncrement关键字表示id列是自动增长的
      */
-    private Context mContext;
 
     public DiaryDatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version){
         super(context, name, factory, version);
-        mContext = context;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package mf.fssq.mf_part_one.entity;
 
+//日期格式转储
 public class Compare {
     private int date,month,year;
 
